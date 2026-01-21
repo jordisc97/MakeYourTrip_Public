@@ -6,7 +6,8 @@ An intelligent travel planning assistant powered by GPT-4, Langchain Agents, and
 
 ### 🏞️ Landing Page
 Embark on your journey with Make Your Trip, an intuitive AI-powered travel planner that effortlessly guides travelers from initial inspiration to a fully personalized itinerary—all within a seamless and user-friendly experience.
-<img width="1845" height="917" alt="image" src="[https://github.com/user-attachments/assets/0e1482df-a4d4-4627-a80b-eb721df17f78](https://github.com/jordisc97/MakeYourTrip_Public/blob/main/MYT/1.png" />
+<!-- <img width="1845" height="917" alt="image" src="[https://github.com/user-attachments/assets/0e1482df-a4d4-4627-a80b-eb721df17f78](https://github.com/jordisc97/MakeYourTrip_Public/blob/main/MYT/1.png" /> -->
+![Logo](MYT/1.png)
 
 ### 💬 Information Gathering
 Experience an engaging conversational interface where the AI travel assistant collects your unique preferences. This screenshot illustrates how the system intuitively guides users through personalized travel preference setup, tailored here for a tropical surf getaway.
