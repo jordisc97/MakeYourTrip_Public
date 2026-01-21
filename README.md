@@ -6,28 +6,28 @@ An intelligent travel planning assistant powered by GPT-4, Langchain Agents, and
 
 ### 🏞️ Landing Page
 Embark on your journey with Make Your Trip, an intuitive AI-powered travel planner that effortlessly guides travelers from initial inspiration to a fully personalized itinerary—all within a seamless and user-friendly experience.
-<!-- <img width="1845" height="917" alt="image" src="[https://github.com/user-attachments/assets/0e1482df-a4d4-4627-a80b-eb721df17f78](https://github.com/jordisc97/MakeYourTrip_Public/blob/main/MYT/1.png" /> -->
 ![Logo](MYT/1.png)
 
 ### 💬 Information Gathering
 Experience an engaging conversational interface where the AI travel assistant collects your unique preferences. This screenshot illustrates how the system intuitively guides users through personalized travel preference setup, tailored here for a tropical surf getaway.
-<img width="1896" height="918" alt="image" src="https://github.com/user-attachments/assets/809e46fb-e2f7-4f46-b2e6-c971ece285ef" />
+![Logo](MYT/2.png)
 
 ### 🌍 Destination Selection
 The Destination Selection module smartly converts your travel desires into tailored recommendations. It showcases detailed comparisons of destinations with costs, highlights, and weather, complemented by an interactive global map that helps travelers visually discover their next adventure.
-<img width="1881" height="942" alt="image" src="https://github.com/user-attachments/assets/11bec971-4de3-4858-b250-b6a745e6956a" />
-<img width="1837" height="922" alt="image" src="https://github.com/user-attachments/assets/87867015-c948-4c56-8641-061289aa82b2" />
+![Logo](MYT/3.png)
+![Logo](MYT/4.png)
 
 ### 📅 Itinerary Creation
 Once the user has decided where to go, given MYT suggestions, it's time to plan!
 This interactive planning enables clear visualization of the travel route and budget breakdown.
-<img width="1848" height="942" alt="image" src="https://github.com/user-attachments/assets/3a8bc66e-555b-4552-a8e9-3a326b53a7f9" />
+![Logo](MYT/5.png)
+
 And follow in a map where this new journey will bring you!
-<img width="1848" height="971" alt="image" src="https://github.com/user-attachments/assets/20789b55-4e42-46bf-b91f-ce46718cdf19" />
+![Logo](MYT/6.png)
 
 ### 📊 Excel with Trip Details and Costs
 The app generates a comprehensive Excel itinerary that breaks down a full trip—such as this Tanzania adventure—into daily activities, expenses, and logistics. This organized roadmap provides clarity, making complex travel planning manageable and transparent for unforgettable experiences.
-<img width="1877" height="816" alt="image" src="https://github.com/user-attachments/assets/fef5dfb5-7c7f-490c-bb3f-d08bc2a50854" />
+![Logo](MYT/7.png)
 
 
 ## 🌟 Features
