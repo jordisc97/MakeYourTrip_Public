@@ -1,310 +1,190 @@
 # MakeYourTrip - AI Travel Planning Assistant
 
-An intelligent travel planning assistant powered by GPT-4, Langchain Agents, and Streamlit that helps users create personalized travel itineraries through natural conversation. The system uses real-time web searches to provide up-to-date information about weather, prices, and popular routes.
+An intelligent travel planning assistant powered by **GPT-4o-mini**, **LangChain**, and **LangGraph** (ReAct) with a **Gradio** web UI. You describe your trip in natural language; the agent searches a tourism-score database, runs live web lookups, proposes multi-stop routes, and produces day-by-day plans with maps and Excel export.
 
 ## Showcase
 
-### 🏞️ Landing Page
-Embark on your journey with Make Your Trip, an intuitive AI-powered travel planner that effortlessly guides travelers from initial inspiration to a fully personalized itinerary—all within a seamless and user-friendly experience.
-![Logo](MYT/1.png)
+### Initial trip requirements
 
-### 💬 Information Gathering
-Experience an engaging conversational interface where the AI travel assistant collects your unique preferences. This screenshot illustrates how the system intuitively guides users through personalized travel preference setup, tailored here for a tropical surf getaway.
-![Logo](MYT/2.png)
+Share dates, budget, interests, and constraints. The chat gathers what it needs and reflects your preferences in the live traveler profile while the agent plans next steps.
 
-### 🌍 Destination Selection
-The Destination Selection module smartly converts your travel desires into tailored recommendations. It showcases detailed comparisons of destinations with costs, highlights, and weather, complemented by an interactive global map that helps travelers visually discover their next adventure.
-![Logo](MYT/3.png)
-![Logo](MYT/4.png)
+![Initial requirements](MYT/1_Initial_requirements.png)
 
-### 📅 Itinerary Creation
-Once the user has decided where to go, given MYT suggestions, it's time to plan!
-This interactive planning enables clear visualization of the travel route and budget breakdown.
-![Logo](MYT/5.png)
+### Route selection
 
-And follow in a map where this new journey will bring you!
-![Logo](MYT/6.png)
+After destinations are in focus, the assistant researches popular itineraries online and presents distinct multi-stop route options with comparison context. Interactive satellite maps and route cards help you choose how you move between stops.
 
-### 📊 Excel with Trip Details and Costs
-The app generates a comprehensive Excel itinerary that breaks down a full trip—such as this Tanzania adventure—into daily activities, expenses, and logistics. This organized roadmap provides clarity, making complex travel planning manageable and transparent for unforgettable experiences.
-![Logo](MYT/7.png)
+![Route selection](MYT/2_Route_Selection.png)
 
+### Day-by-day itinerary
 
-## 🌟 Features
+You get structured daily plans (morning, afternoon, evening) with realistic lodging and transport context, aligned to the route you confirmed.
 
-### 🤖 Smart Planning Process
-- **Initial Check**: Determines whether to start from preferences or jump to route selection
-- **Multi-Stage Planning**:
-  1. Information Collection
-  2. Destination Recommendation
-  3. Destination Confirmation
-  4. Route Selection
-  5. Itinerary Creation
-  6. Output Generation
+![Day by day itinerary](MYT/3_Day_by_day.png)
 
-### 🎯 Core Functionalities
+### Excel export
 
-#### 1. Information Collection
-- **Primary Requirements**
-  - Travel dates with flexibility range
-  - Trip duration including transit time
-  - Departure location and nearby airports
-  - Number of travelers and special needs
-  - Budget breakdown (accommodation/activities/transport)
+Download a styled workbook: overview plus day-by-day sheets for budgets, logistics, and activities—ready to edit offline.
 
-- **Travel Preferences**
-  - Climate and seasonal preferences
-  - Trip purpose (business/leisure/adventure)
-  - Interests (cultural/historical/nature)
-  - Geographical preferences
+![Excel itinerary export](MYT/4_Final_Excel.png)
 
-#### 2. Smart Destination Matching
-- Weighted scoring system for preference matching
-- Seasonal tourism data analysis
-- Budget validation
-- Travel time and connection optimization
-- 5 personalized recommendations including:
-  - Preference matching summary
-  - Optimal visit timing
-  - Cost estimates
-  - Visa requirements
-  - Major attractions
+### Place-level todos
 
-#### 3. Route Planning
-- 3 unique route options per destination
-- Customizable route combinations
-- Real-time route popularity analysis
-- Preference-based optimization
+Granular checklists per stop help you track what still needs booking or confirmation before you travel.
 
-#### 4. Comprehensive Itinerary Creation
-- **Accommodation**
-  - Location-based recommendations
-  - Price comparison
-  - Proximity analysis
+![Todos per place](MYT/5_ToDo_Each_Place.png)
 
-- **Transportation**
-  - Flight options and booking info
-  - Local transport recommendations
-  - Inter-location transfers
+## Features
 
-- **Activities**
-  - Day-by-day scheduling
-  - Weather-dependent alternatives
-  - Dining recommendations
-  - Booking resources
-  - Guide/tour options
+### Planning and research
 
-- **Travel Essentials**
-  - Weather-based packing lists
-  - Emergency contacts
-  - Currency information
-  - Local customs guide
-  - Insurance options
+- **Destination discovery** — Search 900+ scored destinations across 100+ countries using monthly suitability scores (0–10) from the bundled tourism database.
+- **Live web search** — DuckDuckGo-backed lookups for prices, weather, visa notes, and safety (snippet-first; optional deeper page extraction via environment flags).
+- **Side-by-side comparison** — Compare candidate destinations for a chosen travel month.
+- **Smart route planning** — Researches real-world route patterns, then synthesizes **2–4** distinct multi-stop options (minimum night rules and airport-aware routing are enforced in tooling and prompts).
+- **Interactive route maps** — Folium satellite maps with toggleable layers, night-count markers, and curved route lines (geocoding via Nominatim with caching).
 
-### 🎨 Interactive Interface
-- Dynamic maps with route visualization
-- Downloadable PDF itineraries
-- Excel budget breakdowns
-- Calendar integration
-- Centralized booking links
-- Real-time weather forecasts
-- Transportation schedules
+### Outputs and UI
 
-### 🔄 Planned Features
-- Save/resume functionality
-- Preference editing
-- Itinerary sharing
-- Multi-format exports
-- Trip checklist generation
-- Emergency contact cards
+- **Day-by-day itineraries** — Activities, transport, and cost-style breakdowns grounded in the selected route.
+- **Excel export** — OpenPyXL workbooks with styled headers and sizing.
+- **Streaming Gradio UI** — Dark glass-style interface with tool-activity indicators so you see searches, comparisons, and generations as they run.
+- **Session-safe HTML** — Maps and heavy HTML outputs are isolated per session for concurrent use.
 
-## 🏗️ Project Structure
+### Architecture note
+
+There is **no fixed multi-step wizard** inside the code: one **ReAct** agent (LangGraph) decides **when** and **which** tools to call from conversation context. The flow below is the logical journey users typically experience, not a hardcoded state machine.
+
+## Project structure
 
 ```
-main_MYT/
-├── agents/                 # AI agent components
-│   ├── context_orchestrator.py
-│   └── travel_search_agent.py
-├── utils/                 # Utility functions
-│   ├── display_excel_utils.py
-│   └── geo_utils.py
-├── search/               # Search functionality
-│   └── travel_utils.py
-├── docs/                 # Documentation
-│   └── execution_flow.drawio
-├── assets/              # Static assets
-├── streamlit_app.py     # Main application
-├── travel_chatbot.py    # Core chatbot logic
-└── prompts.py          # Conversation prompts
+MakeYourTrip_Agent/
+├── agent.py                # ReAct agent (CLI + build_agent)
+├── app.py                  # Gradio web UI (streaming, theme, profile sidebar)
+├── prompts.py              # System prompt and output conventions
+├── conversation_logger.py  # Session logging (JSONL, profile, metadata)
+├── chat_handler.py         # Message handling, streaming, tool trace UX
+├── tools/
+│   ├── data_tools.py       # Tourism DB: search, top-N, compare
+│   ├── search_tools.py     # DuckDuckGo web search (timeouts / batching)
+│   ├── route_tools.py      # Route research, synthesis, map + cards
+│   ├── output_tools.py     # Excel itinerary export
+│   ├── map_tools.py        # Folium map generation
+│   ├── geo_utils.py        # Geocoding + curve helpers
+│   └── session_store.py    # Per-session HTML isolation
+├── data/
+│   └── region_tourism_score.xlsx
+├── output/                 # Generated maps & Excel (often gitignored)
+└── requirements.txt
 ```
 
-## 🚀 Getting Started
+## Getting started
 
-1. **Prerequisites**
+1. **Python environment**
+
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   venv\Scripts\activate
    pip install -r requirements.txt
    ```
 
-2. **Environment Setup**
-   Create a `.env` file with:
+2. **Environment variables**
+
+   Create a `.env` in the project root:
+
    ```
-   OPENAI_API_KEY=your_api_key_here
+   OPENAI_API_KEY=sk-your-key-here
    ```
 
-3. **Running the App**
+   Optional tuning (timeouts, MCP web extraction, tool-trace visibility) is documented in the main `README.md`.
+
+3. **Tourism data**
+
+   Place `region_tourism_score.xlsx` under `data/` (see main README for required columns).
+
+4. **Run the app**
+
    ```bash
-   streamlit run streamlit_app.py
+   python app.py
    ```
 
-## 💡 How It Works
+   Open the URL shown in the terminal (default [http://localhost:7860](http://localhost:7860)).
 
-### 1. Conversation Flow
-The system maintains a natural conversation while guiding users through the planning process:
+   **CLI only:** `python agent.py`
+
+## How it works
+
+### 1. Typical conversation arc
 
 ```mermaid
 graph TD
-    A[Initial Check] -->|New Plan| B[Information Collection]
-    A -->|Existing Destination| E[Route Selection]
-    B --> C[Destination Recommendation]
-    C --> D[Destination Confirmation]
-    D --> E
-    E --> F[Itinerary Creation]
-    F --> G[Output Generation]
+    A[User describes trip] --> B{Agent chooses tools}
+    B --> C[Search / compare destinations]
+    B --> D[Web search for live facts]
+    B --> E[Generate route options + map]
+    B --> F[Build itinerary + Excel + map]
+    C --> G[User confirms or refines]
+    D --> G
+    E --> G
+    F --> G
+    G --> A
 ```
 
-### 2. Planning Stages
+### 2. High-level data flow
+
 ```mermaid
-stateDiagram-v2
-    [*] --> InitialCheck
-    InitialCheck --> Stage1: New Plan
-    InitialCheck --> Stage4: Has Destination
-    
-    state Stage1 {
-        [*] --> CollectDates
-        CollectDates --> CollectDuration
-        CollectDuration --> CollectLocation
-        CollectLocation --> CollectTravelers
-        CollectTravelers --> CollectBudget
-        CollectBudget --> CollectPreferences
-        CollectPreferences --> [*]
-    }
-    
-    Stage1 --> Stage2
-    
-    state Stage2 {
-        [*] --> AnalyzePreferences
-        AnalyzePreferences --> SearchDestinations
-        SearchDestinations --> ScoreDestinations
-        ScoreDestinations --> GenerateRecommendations
-        GenerateRecommendations --> [*]
-    }
-    
-    Stage2 --> Stage3
-    
-    state Stage3 {
-        [*] --> PresentOptions
-        PresentOptions --> CompareDestinations
-        CompareDestinations --> ConfirmChoice
-        ConfirmChoice --> [*]
-    }
-    
-    Stage3 --> Stage4
-    
-    state Stage4 {
-        [*] --> GenerateRoutes
-        GenerateRoutes --> CustomizeRoute
-        CustomizeRoute --> FinalizeRoute
-        FinalizeRoute --> [*]
-    }
-    
-    Stage4 --> Stage5
-    
-    state Stage5 {
-        [*] --> PlanAccommodation
-        PlanAccommodation --> PlanTransport
-        PlanTransport --> PlanActivities
-        PlanActivities --> AddExtras
-        AddExtras --> [*]
-    }
-    
-    Stage5 --> Stage6
-    
-    state Stage6 {
-        [*] --> GenerateMaps
-        GenerateMaps --> CreatePDF
-        CreatePDF --> CreateExcel
-        CreateExcel --> AddBookings
-        AddBookings --> [*]
-    }
-    
-    Stage6 --> [*]
+flowchart LR
+  U[User] --> G[Gradio app.py]
+  G --> A[ReAct agent]
+  A --> T[Tools: data, web, route, excel, map]
+  T --> O[(output/ HTML + xlsx)]
+  O --> G
+  G --> U
 ```
 
-### 3. Component Interaction
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant S as Streamlit App
-    participant C as TravelChatbot
-    participant A as SearchAgent
-    participant R as RoutePlanner
-    participant W as Web Services
+### 3. Key components
 
-    U->>S: Input Preferences
-    S->>C: Process Input
-    C->>A: Research Request
-    A->>W: Search Information
-    W-->>A: Search Results
-    A-->>C: Processed Info
-    C->>R: Plan Route
-    R-->>C: Optimized Route
-    C-->>S: Generate Response
-    S-->>U: Display Results
-```
+| Piece | Role |
+|-------|------|
+| `create_react_agent` (LangGraph) | Decides tool calls from context |
+| `data_tools` | Tourism scores, lists, comparisons |
+| `search_tools` | Web search for fresh prices and facts |
+| `route_tools` | Online route research + multi-stop options + map HTML |
+| `output_tools` | Excel itinerary export |
+| `map_tools` | Folium maps for routes |
+| `session_store` | Keeps each user’s map HTML separate |
 
-### 4. Key Components
-- **EnhancedTravelChatbot**: Manages conversation flow and planning logic
-- **TravelSearchAgent**: Performs real-time research for up-to-date information
-- **ContextOrchestrator**: Maintains conversation context and user preferences
-- **RoutePlanner**: Optimizes travel routes based on preferences
+## Technical stack
 
-### 5. Data Processing
-- Natural language processing for preference extraction
-- Real-time web searching for current information
-- Geocoding and route optimization
-- Smart itinerary generation
+| Area | Technology |
+|------|------------|
+| UI | Gradio 5+ |
+| Agent | LangChain + LangGraph (ReAct) |
+| LLM | OpenAI GPT-4o-mini |
+| Web search | DuckDuckGo (`ddgs`) |
+| Maps | Folium + Esri satellite tiles |
+| Geocoding | Geopy / Nominatim |
+| Data | Pandas + OpenPyXL |
 
-## 🛠️ Technical Stack
+## Contributing
 
-- **Frontend**: Streamlit
-- **AI/ML**: 
-  - OpenAI GPT-4
-  - Langchain Agents
-  - Custom LLM Chains
-- **Data Processing**: 
-  - Pandas
-  - NumPy
-  - Custom Extractors
-- **Mapping**: Folium
-- **Documentation**: Draw.io
+1. Fork the repository.
+2. Create a branch (`git checkout -b feature/your-feature`).
+3. Commit with clear messages.
+4. Open a pull request.
 
-## 🤝 Contributing
+## License
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+This project is for personal and educational use unless otherwise stated by the repository owner.
 
-## 📄 License
+## Acknowledgments
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+- OpenAI for the GPT API.
+- LangChain and LangGraph for agent tooling.
+- Gradio for the web interface.
+- OpenStreetMap / Nominatim and Esri tile providers used via community libraries.
+- Open-source projects listed in `requirements.txt`.
 
-## 🙏 Acknowledgments
+---
 
-- OpenAI for GPT-4 API
-- Langchain for agent framework
-- Streamlit for the web framework
-- The open-source community for various dependencies
+*To refresh screenshots, replace the PNG files in `MYT/` and keep the same filenames so image links in this document stay valid.*
