@@ -2,6 +2,8 @@
 
 An intelligent travel planning assistant powered by **GPT-4o-mini**, **LangChain**, and **LangGraph** (ReAct) with a **Gradio** web UI. You describe your trip in natural language; the agent searches a tourism-score database, runs live web lookups, proposes multi-stop routes, and produces day-by-day plans with maps and Excel export.
 
+For access to the online Chat, please email jordisc@sole.cat.
+
 ## Showcase
 
 ### Initial trip requirements
