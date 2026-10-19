@@ -1,10 +1,21 @@
-# MakeYourTrip - AI Travel Planning Assistant
 
-An intelligent travel planning assistant powered by **GPT-4o-mini**, **LangChain**, and **LangGraph** (ReAct) with a **Gradio** web UI. You describe your trip in natural language; the agent searches a tourism-score database, runs live web lookups, proposes multi-stop routes, and produces day-by-day plans with maps and Excel export.
+# MakeYourTrip Agent
+
+An AI-powered travel planning assistant that helps you discover destinations, compare options, plan multi-stop routes, look up **live MCP-backed flight and hotel prices**, and build day-by-day itineraries with interactive maps and Excel export — all through natural conversation.
+
+Built with LangChain, LangGraph, and DeepSeek using a ReAct (Reasoning + Acting) architecture.
 
 You can access the agent at: https://toti97-makeyourtrip.hf.space/.
 
-For any questions please reach out to jordisc@sole.cat.
+For any questions or errors please reach out to jordisc@sole.cat.
+
+## Strongest capabilities
+
+- **Live MCP flight & hotel prices** — Dated fares and midrange nights with price bands
+- **270+ scored destinations** — Search and compare across 200+ countries by travel month
+- **Multi-stop route options** — 2–5 distinct itineraries with maps and night-tier planning
+- **Day-by-day + Excel export** — Full daily plan plus a downloadable styled workbook
+- **MCP web research** — Live lookup for weather, costs, visas, and trip facts
 
 ## Showcase
 
