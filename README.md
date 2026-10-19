@@ -1,13 +1,14 @@
+# MakeYourTrip
 
-# MakeYourTrip Agent
+Plan a real trip by chatting. MakeYourTrip is an AI travel assistant that turns dates, budget, and preferences into destination picks, multi-stop routes, live price checks, day-by-day plans, maps, and Excel export.
 
-An AI-powered travel planning assistant that helps you discover destinations, compare options, plan multi-stop routes, look up **live MCP-backed flight and hotel prices**, and build day-by-day itineraries with interactive maps and Excel export — all through natural conversation.
+**Try it live:** [https://toti97-makeyourtrip.hf.space/](https://toti97-makeyourtrip.hf.space/)
 
-Built with LangChain, LangGraph, and DeepSeek using a ReAct (Reasoning + Acting) architecture.
+Questions, feedback, or errors → [jordisc@sole.cat](mailto:jordisc@sole.cat)
 
-You can access the agent at: https://toti97-makeyourtrip.hf.space/.
+Built with **LangChain**, **LangGraph** (ReAct), **DeepSeek**, and a **Gradio** web UI.
 
-For any questions or errors please reach out to jordisc@sole.cat.
+---
 
 ## Strongest capabilities
 
@@ -16,6 +17,9 @@ For any questions or errors please reach out to jordisc@sole.cat.
 - **Multi-stop route options** — 2–5 distinct itineraries with maps and night-tier planning
 - **Day-by-day + Excel export** — Full daily plan plus a downloadable styled workbook
 - **MCP web research** — Live lookup for weather, costs, visas, and trip facts
+- **Streaming Gradio UI** — Chat planning with live traveler profile and tool progress
+
+---
 
 ## Showcase
 
@@ -27,19 +31,19 @@ Share dates, budget, interests, and constraints. The chat gathers what it needs 
 
 ### Route selection
 
-After destinations are in focus, the assistant researches popular itineraries online and presents distinct multi-stop route options with comparison context. Interactive satellite maps and route cards help you choose how you move between stops.
+After destinations are in focus, the assistant researches popular itineraries and presents distinct multi-stop route options. Interactive satellite maps and route cards help you choose how you move between stops.
 
 ![Route selection](MYT/2_Route_Selection.png)
 
 ### Day-by-day itinerary
 
-You get structured daily plans (morning, afternoon, evening) with realistic lodging and transport context, aligned to the route you confirmed.
+You get structured daily plans (morning, afternoon, evening) with lodging and transport context, aligned to the route you confirmed.
 
 ![Day by day itinerary](MYT/3_Day_by_day.png)
 
 ### Excel export
 
-Download a styled workbook: overview plus day-by-day sheets for budgets, logistics, and activities—ready to edit offline.
+Download a styled workbook: overview, day-by-day sheets, and cost / logistics summaries — ready to edit offline.
 
 ![Excel itinerary export](MYT/4_Final_Excel.png)
 
@@ -49,157 +53,107 @@ Granular checklists per stop help you track what still needs booking or confirma
 
 ![Todos per place](MYT/5_ToDo_Each_Place.png)
 
-## Features
+---
 
-### Planning and research
+## What you can do
 
-- **Destination discovery** — Search 900+ scored destinations across 100+ countries using monthly suitability scores (0–10) from the bundled tourism database.
-- **Live web search** — DuckDuckGo-backed lookups for prices, weather, visa notes, and safety (snippet-first; optional deeper page extraction via environment flags).
-- **Side-by-side comparison** — Compare candidate destinations for a chosen travel month.
-- **Smart route planning** — Researches real-world route patterns, then synthesizes **2–4** distinct multi-stop options (minimum night rules and airport-aware routing are enforced in tooling and prompts).
-- **Interactive route maps** — Folium satellite maps with toggleable layers, night-count markers, and curved route lines (geocoding via Nominatim with caching).
+### Discover and compare
 
-### Outputs and UI
+- Search **270+** scored destinations across **200+** countries using monthly tourism suitability scores
+- Compare shortlisted places for a specific travel month
+- Pull live context (weather, visas, safety notes, typical costs) via MCP-backed web research
 
-- **Day-by-day itineraries** — Activities, transport, and cost-style breakdowns grounded in the selected route.
-- **Excel export** — OpenPyXL workbooks with styled headers and sizing.
-- **Streaming Gradio UI** — Dark glass-style interface with tool-activity indicators so you see searches, comparisons, and generations as they run.
-- **Session-safe HTML** — Maps and heavy HTML outputs are isolated per session for concurrent use.
+### Price the trip
 
-### Architecture note
+- Dated **round-trip** and **one-way** flight estimates via MCP price tools
+- Midrange **hotel** nightly rates with bands and confidence signals
+- Optional cheaper-date sweeps on the same flight route
+- Ground transport and daily food cost helpers for fuller budget context
 
-There is **no fixed multi-step wizard** inside the code: one **ReAct** agent (LangGraph) decides **when** and **which** tools to call from conversation context. The flow below is the logical journey users typically experience, not a hardcoded state machine.
+### Plan the route
 
-## Project structure
+- Research real-world itinerary patterns, then synthesize **2–5** distinct multi-stop options
+- Night tiers (anchor / secondary / transit), diversity filtering, and airport-aware start/end
+- Interactive Folium satellite maps with night markers and curved route lines
+- Transport-aware legs (sea gaps, long ground hops, self-drive preferences remembered in-session)
 
-```
-MakeYourTrip_Agent/
-├── agent.py                # ReAct agent (CLI + build_agent)
-├── app.py                  # Gradio web UI (streaming, theme, profile sidebar)
-├── prompts.py              # System prompt and output conventions
-├── conversation_logger.py  # Session logging (JSONL, profile, metadata)
-├── chat_handler.py         # Message handling, streaming, tool trace UX
-├── tools/
-│   ├── data_tools.py       # Tourism DB: search, top-N, compare
-│   ├── search_tools.py     # DuckDuckGo web search (timeouts / batching)
-│   ├── route_tools.py      # Route research, synthesis, map + cards
-│   ├── output_tools.py     # Excel itinerary export
-│   ├── map_tools.py        # Folium map generation
-│   ├── geo_utils.py        # Geocoding + curve helpers
-│   └── session_store.py    # Per-session HTML isolation
-├── data/
-│   └── region_tourism_score.xlsx
-├── output/                 # Generated maps & Excel (often gitignored)
-└── requirements.txt
-```
+### Take it with you
 
-## Getting started
+- Day-by-day activities grounded in the route you picked
+- Excel export with overview, calendar-style days, and accommodation / transport summaries
+- Session-isolated maps and HTML so concurrent users stay separate
 
-1. **Python environment**
-
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-
-2. **Environment variables**
-
-   Create a `.env` in the project root:
-
-   ```
-   OPENAI_API_KEY=sk-your-key-here
-   ```
-
-   Optional tuning (timeouts, MCP web extraction, tool-trace visibility) is documented in the main `README.md`.
-
-3. **Tourism data**
-
-   Place `region_tourism_score.xlsx` under `data/` (see main README for required columns).
-
-4. **Run the app**
-
-   ```bash
-   python app.py
-   ```
-
-   Open the URL shown in the terminal (default [http://localhost:7860](http://localhost:7860)).
-
-   **CLI only:** `python agent.py`
+---
 
 ## How it works
 
-### 1. Typical conversation arc
+There is **no fixed wizard**. One ReAct agent (LangGraph) decides **when** and **which** tools to call from the conversation — you stay in a natural chat the whole way.
 
 ```mermaid
 graph TD
-    A[User describes trip] --> B{Agent chooses tools}
+    A[You describe the trip] --> B{Agent chooses tools}
     B --> C[Search / compare destinations]
-    B --> D[Web search for live facts]
-    B --> E[Generate route options + map]
-    B --> F[Build itinerary + Excel + map]
-    C --> G[User confirms or refines]
+    B --> D[Live prices + web research]
+    B --> E[Route options + map]
+    B --> F[Day-by-day + Excel]
+    C --> G[You refine or confirm]
     D --> G
     E --> G
     F --> G
     G --> A
 ```
 
-### 2. High-level data flow
+Typical flow:
 
-```mermaid
-flowchart LR
-  U[User] --> G[Gradio app.py]
-  G --> A[ReAct agent]
-  A --> T[Tools: data, web, route, excel, map]
-  T --> O[(output/ HTML + xlsx)]
-  O --> G
-  G --> U
-```
-
-### 3. Key components
-
-| Piece | Role |
-|-------|------|
-| `create_react_agent` (LangGraph) | Decides tool calls from context |
-| `data_tools` | Tourism scores, lists, comparisons |
-| `search_tools` | Web search for fresh prices and facts |
-| `route_tools` | Online route research + multi-stop options + map HTML |
-| `output_tools` | Excel itinerary export |
-| `map_tools` | Folium maps for routes |
-| `session_store` | Keeps each user’s map HTML separate |
-
-## Technical stack
-
-| Area | Technology |
-|------|------------|
-| UI | Gradio 5+ |
-| Agent | LangChain + LangGraph (ReAct) |
-| LLM | OpenAI GPT-4o-mini |
-| Web search | DuckDuckGo (`ddgs`) |
-| Maps | Folium + Esri satellite tiles |
-| Geocoding | Geopy / Nominatim |
-| Data | Pandas + OpenPyXL |
-
-## Contributing
-
-1. Fork the repository.
-2. Create a branch (`git checkout -b feature/your-feature`).
-3. Commit with clear messages.
-4. Open a pull request.
-
-## License
-
-This project is for personal and educational use unless otherwise stated by the repository owner.
-
-## Acknowledgments
-
-- OpenAI for the GPT API.
-- LangChain and LangGraph for agent tooling.
-- Gradio for the web interface.
-- OpenStreetMap / Nominatim and Esri tile providers used via community libraries.
-- Open-source projects listed in `requirements.txt`.
+1. Describe dates, budget, interests, and constraints  
+2. Review destination options and live price context  
+3. Pick among 2–5 multi-stop routes on an interactive map  
+4. Receive a day-by-day plan and download the Excel workbook  
+5. Keep chatting to adjust nights, budget, or stops  
 
 ---
 
-*To refresh screenshots, replace the PNG files in `MYT/` and keep the same filenames so image links in this document stay valid.*
+## Tech stack
+
+| Area | Technology |
+|------|------------|
+| UI | Gradio (streaming chat) |
+| Agent | LangChain + LangGraph (ReAct) |
+| LLM | DeepSeek |
+| Live research & prices | MCP integrations |
+| Maps | Folium + Esri satellite tiles |
+| Geocoding | Nominatim / OpenStreetMap |
+| Data & export | Pandas + OpenPyXL |
+
+---
+
+## Try it
+
+Use the hosted demo — no local setup required:
+
+**[Open MakeYourTrip on Hugging Face →](https://toti97-makeyourtrip.hf.space/)**
+
+If something looks wrong or you want early access / collaboration, email **jordisc@sole.cat**.
+
+---
+
+## Notes
+
+- Prices and web facts are **planning estimates**, not a booking checkout. Always confirm with airlines, hotels, and official sources before you pay.
+- Tourism scores and route templates are decision aids; the agent adapts them to your constraints in chat.
+- This public page showcases the product. Screenshots live in [`MYT/`](MYT/).
+
+## License
+
+Personal and educational use unless otherwise stated by the repository owner.
+
+## Acknowledgments
+
+- DeepSeek for the LLM API  
+- LangChain and LangGraph for agent tooling  
+- Gradio for the web interface  
+- OpenStreetMap / Nominatim and Esri tile providers via community libraries  
+
+---
+
+*To refresh screenshots, replace the PNGs in `MYT/` and keep the same filenames so the links above stay valid.*
